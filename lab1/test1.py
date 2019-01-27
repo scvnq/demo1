@@ -9,19 +9,21 @@
 \pard\pardeftab720\sl320\partightenfactor0
 
 \f0\fs24 \cf2 \expnd0\expndtw0\kerning0
-\outl0\strokewidth0 \strokec2 import\cb3  MySQLdb\
+import\cb3  MySQLdb\
 \
-db = MySQLdb.connect(host=\cf4 \cb1 \strokec4 "localhost"\cf2 \cb3 \strokec2 ,\
-user=\cf4 \cb1 \strokec4 ""\cf2 \cb3 \strokec2 ,\
-passwd=\cf4 \cb1 \strokec4 ""\cf2 \cb3 \strokec2 ,\
-db=\cf4 \cb1 \strokec4 ""\cf2 \cb3 \strokec2 )\
+\
+db = MySQLdb.connect(host=\cf4 \cb1 "localhost"\cf2 \cb3 ,\
+user=\cf4 \cb1 ""\cf2 \cb3 ,\
+passwd=\cf4 \cb1 ""\cf2 \cb3 ,\
+db=\cf4 \cb1 ""\cf2 \cb3 )\
 \
 cur = db.cursor()\
 \
-platform = raw_input(\cf4 \cb1 \strokec4 'Enter language: '\cf2 \cb3 \strokec2 )\
+platform = raw_input(\cf4 \cb1 'Enter language: '\cf2 \cb3 )\
 \
-cur.execute(\cf4 \cb1 \strokec4 "SELECT * FROM platforms WHERE language = '%s';"\cf2 \cb3 \strokec2  % platform)\
+cur.execute(\cf4 \cb1 "SELECT * FROM platforms WHERE language = '%s';"\cf2 \cb3  % platform)\
 \cb1 for\cb3  row \cb1 in\cb3  cur.fetchall():\
 \cb1 print\cb3  (row)\
+\
 \
 db.close()}
