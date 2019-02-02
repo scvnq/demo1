@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<script src="https://cdn.staticfile.org/angular.js/1.7.6/angular.min.js"></script>
+<script src="//code.angularjs.org/snapshot/angular-sanitize.js"></script>
+<style>
+    .weatherModule {
+        background: #f2f2f2;
+        height: 190px;
+        width: 350px;
+        border: 1px dashed #ccc;
+        padding: 1em;
+        opacity:0.50;
+    }
+
+    .weatherbox {
+       margin: 0 auto;
+        border: #0f0f0f 5px;
+        height:1300px ;
+        width: 800px;
+
+    }
+    .bodybox{
+        background-image: url("imgdir/Screen Shot 2019-02-02 at 12.46.47 PM.png") ;
+    }
+    .weatherM
+    {opacity:0.50;
+
+    }
+   </style>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <title>Title</title>
+</head>
+<body class="bodybox">
+<div class="weatherbox" ng-app="weather" ng-controller="weatherctrl">
+    <H2 style="text-align: center; color: whitesmoke">Weather</H2>
+    <div class="form-group  " style="width: 200px; ">
+        <label for="state name">State Name:</label>
+        <input type="text" class="form-control" style="width: 90%" id="statename" placeholder="please input state name">
+    </div>
+    <div class="form-group" style="width: 200px;">
+        <label for="city name">City Name:</label>
+        <input type="text" class="form-control" style="width: 90%" id="cityname" placeholder="please input city name" >
+    </div>
+    <button type="submit" class="btn btn-default" id="btn" ng-click="getWeather()">Show Weather</button>
+
+    <div class="weatherModule">
+        <p class="carpenter" ng-bind-html="cweather" ng-style="{float:'left'}"></p>
+        <div class="currentIcon" ng-bind-html="currentIcon" ng-style="{float:'left',width:'200px'}"></div>
+    </div>
+    <div class="weatherM" ng-bind-html="a" ng-style="{ width:'800px',height:'190px',border:'1px dashed #ccc',background:'#f2f2f2'}">
+    </div>
+    <div class="weatherM" ng-bind-html="b" ng-style="{width:'800px',height:'190px',border:'1px dashed #ccc',background:'#f2f2f2'}">
+    </div>
+    <div class="weatherM" ng-bind-html="c" ng-style="{width:'800px',height:'190px',border:'1px dashed #ccc',background:'#f2f2f2'}">
+    </div>
+    <div class="weatherM" ng-bind-html="d" ng-style="{width:'800px',height:'190px',border:'1px dashed #ccc',background:'#f2f2f2'}">
+    </div>
+    <div class="weatherM" ng-bind-html="e" ng-style="{width:'800px',height:'190px',border:'1px dashed #ccc',background:'#f2f2f2'}">
+    </div>
+    </div>
+<script>
+
+    angular.module('weather', [])
+
+        .controller('weatherctrl', function($scope, $http,$sce,$window) {
+
+            //var url1='http://api.wunderground.com/api/4bbbc25f4f5946dd/conditions/q/'+$scope.statename+'/'+cn+'.json'
+
+            $scope.getWeather = function () {
+                var sn=angular.element(document.getElementById('statename')).val(); //add 'angular.element' in angularjs for getting element value
+                var cns=angular.element(document.getElementById('cityname')).val();
+                console.log(cns);
+                console.log(sn);
+                $http.get('http://api.wunderground.com/api/4bbbc25f4f5946dd/conditions/q/'+sn+'/'+cns+'.json').then(function onSuccess(response) {
+                   // console.log('http://api.wunderground.com/api/4bbbc25f4f5946dd/conditions/q/'+sn+'/'+cns+'.json');
+
+                    console.log(response);
+
+                    var temp = response.data.current_observation.temp_f;
+                    var icon = response.data.current_observation.icon_url;
+                    var weather = response.data.current_observation.weather;
+                    var wind=response.data.current_observation.wind_mph;
+                    var humidity=response.data.current_observation.relative_humidity;
+                    var visibility=response.data.current_observation.visibility_km
+                    console.log(temp);
+                    $scope.cweather =$sce.trustAsHtml(
+                         "<b>Current temperature:</b>" + temp + " &deg; F <br><b>weather:</b> " + weather + "  <br><b>wind:</b> " + wind + " mph<br><b>humidity:</b> " + humidity + "<br><b>visibility:</b> " + visibility + " km");
+
+                    $scope.currentIcon = $sce.trustAsHtml("<img src='" + icon + "'/>");
+
+                }).catch(function onError(){
+
+                    $window.alert("No cities match your search query! Please check your input!(include whitespace if needed!)");
+                })
+
+                $http.get('http://api.wunderground.com/api/36b799dc821d5836/forecast/q/'+sn+'/'+cns+'.json').then(function (response1) {
+                    console.log(response1);
+
+                    var period = response1.data.forecast.txt_forecast.forecastday[0].period;
+                    var icon = response1.data.forecast.txt_forecast.forecastday[0].icon_url;
+                    var fcttext_metric = response1.data.forecast.txt_forecast.forecastday[0].fcttext_metric;
+                    var title = response1.data.forecast.txt_forecast.forecastday[0].title;
+                    var fcttext = response1.data.forecast.txt_forecast.forecastday[0].fcttext;
+
+                    $scope.a =$sce.trustAsHtml(
+                        "<b>forecast period:</b> " + period + "  <br><b>weather:</b> <img src='" + icon + "'/> <br><b>title:</b> "+ title +"<br><b>description:</b> "+ fcttext +" <br><b>forecast_metric:</b> "+ fcttext_metric +" ");
+
+                }).catch(function onError(){
+
+                    $window.alert("Can't display the forecast, please type in correct city name!(include whitespace if needed!)");
+                })
+
+                $http.get('http://api.wunderground.com/api/36b799dc821d5836/forecast/q/'+sn+'/'+cns+'.json').then(function (response1) {
+                    console.log(response1);
+
+                    var period = response1.data.forecast.txt_forecast.forecastday[1].period;
+                    var icon = response1.data.forecast.txt_forecast.forecastday[1].icon_url;
+                    var fcttext_metric = response1.data.forecast.txt_forecast.forecastday[1].fcttext_metric;
+                    var title = response1.data.forecast.txt_forecast.forecastday[1].title;
+                    var fcttext = response1.data.forecast.txt_forecast.forecastday[1].fcttext;
+
+                    $scope.b =$sce.trustAsHtml(
+                        "<b>forecast period:</b> " + period + "  <br><b>weather:</b> <img src='" + icon + "'/> <br><b>title:</b> "+ title +"<br><b>description:</b> "+ fcttext +" <br><b>forecast_metric:</b> "+ fcttext_metric +" ");
+
+                })
+
+                $http.get('http://api.wunderground.com/api/36b799dc821d5836/forecast/q/'+sn+'/'+cns+'.json').then(function (response1) {
+                    console.log(response1);
+
+                    var period = response1.data.forecast.txt_forecast.forecastday[2].period;
+                    var icon = response1.data.forecast.txt_forecast.forecastday[2].icon_url;
+                    var fcttext_metric = response1.data.forecast.txt_forecast.forecastday[2].fcttext_metric;
+                    var title = response1.data.forecast.txt_forecast.forecastday[2].title;
+                    var fcttext = response1.data.forecast.txt_forecast.forecastday[2].fcttext;
+
+                    $scope.c =$sce.trustAsHtml(
+                        "<b>forecast period:</b> " + period + "  <br><b>weather:</b> <img src='" + icon + "'/> <br><b>title:</b> "+ title +"<br><b>description:</b> "+ fcttext +" <br><b>forecast_metric:</b> "+ fcttext_metric +" ");
+
+
+                })
+
+                $http.get('http://api.wunderground.com/api/36b799dc821d5836/forecast/q/'+sn+'/'+cns+'.json').then(function (response1) {
+                    console.log(response1);
+
+                    var period = response1.data.forecast.txt_forecast.forecastday[3].period;
+                    var icon = response1.data.forecast.txt_forecast.forecastday[3].icon_url;
+                    var fcttext_metric = response1.data.forecast.txt_forecast.forecastday[3].fcttext_metric;
+                    var title = response1.data.forecast.txt_forecast.forecastday[3].title;
+                    var fcttext = response1.data.forecast.txt_forecast.forecastday[3].fcttext;
+
+                    $scope.d =$sce.trustAsHtml(
+                        "<b>forecast period:</b> " + period + "  <br><b>weather:</b> <img src='" + icon + "'/> <br><b>title:</b> "+ title +"<br><b>description:</b> "+ fcttext +" <br><b>forecast_metric:</b> "+ fcttext_metric +" ");
+
+
+                })
+
+                $http.get('http://api.wunderground.com/api/36b799dc821d5836/forecast/q/'+sn+'/'+cns+'.json').then(function (response1) {
+                    console.log(response1);
+
+                    var period = response1.data.forecast.txt_forecast.forecastday[4].period;
+                    var icon = response1.data.forecast.txt_forecast.forecastday[4].icon_url;
+                    var fcttext_metric = response1.data.forecast.txt_forecast.forecastday[4].fcttext_metric;
+                    var title = response1.data.forecast.txt_forecast.forecastday[4].title;
+                    var fcttext = response1.data.forecast.txt_forecast.forecastday[4].fcttext;
+
+                    $scope.e =$sce.trustAsHtml(
+                        "<b>forecast period:</b> " + period + "  <br><b>weather:</b> <img src='" + icon + "'/> <br><b>title:</b> "+ title +"<br><b>description:</b> "+ fcttext +" <br><b>forecast_metric:</b> "+ fcttext_metric +" ");
+
+
+                })
+            }
+        })
+</script>
+</body>
+</html>
