@@ -1,0 +1,13 @@
+{
+  "cordova-plugin-googleplus": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-googleplus@7.0.0"
+    },
+    "is_top_level": true,
+    "variables": {
+      "REVERSED_CLIENT_ID": "350445343701-0it51u4lululks5rv5ivoi2au625s5t5.apps.googleusercontent.com",
+      "WEB_APPLICATION_CLIENT_ID": "350445343701-0it51u4lululks5rv5ivoi2au625s5t5.apps.googleusercontent.com"
+    }
+  }
+}
