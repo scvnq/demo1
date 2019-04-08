@@ -1,0 +1,32 @@
+<link href="https://cdn.staticfile.org/ionic/1.3.2/css/ionic.css" rel="stylesheet">
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Scan your receipt
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content no-margin>
+<ion-refresher (ionRefresh)="pullDown($event)">
+  <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="{{Refresh}}" refreshingSpinner="circles" refreshingText="{{Refresh}}">
+  </ion-refresher-content>
+</ion-refresher>
+
+<img src="{{pathForImage(lastImage)}}" style="width:100%;" [hidden]="lastImage === null" />
+<h3>choose your receipt</h3>
+  <ion-toolbar color="primary">
+    <ion-input type='file' (change)="readUrl($event)"><ion-icon name="camera"></ion-icon></ion-input>
+    <ion-img [src]="url" style="height:auto;width: fit-content" color="blue"></ion-img>
+    <ion-buttons>
+
+
+      <button class="button button-block button-positive" ion-button icon-left (click)="uploadImage()" [disabled]="lastImage === null" >
+        <ion-icon name="cloud-upload"></ion-icon>upload
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-content>
+
+<ion-footer>
+
+</ion-footer>
